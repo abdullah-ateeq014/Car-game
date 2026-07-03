@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="Avoid traffic and score points! A fun car racing game.">
+    <link rel="manifest" href="/Car-game/manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%234caf50' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🚗</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%234caf50' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🚗</text></svg>">
     <title>Car Game - Drive & Survive!</title>
     <style>
         * {
@@ -36,6 +41,37 @@
             font-size: 2.5rem;
             text-shadow: 0 0 10px #4caf50;
             margin: 10px 0;
+        }
+
+        .install-banner {
+            background: linear-gradient(135deg, #ff9800, #fb8c00);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .install-banner.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .install-banner p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
         }
 
         .status-bar {
@@ -123,6 +159,21 @@
             opacity: 0.7;
         }
 
+        #install-btn {
+            background-color: #ff9800;
+            color: white;
+            min-width: 120px;
+        }
+
+        #install-btn:hover {
+            background-color: #fb8c00;
+            box-shadow: 0 0 15px rgba(255, 152, 0, 0.7);
+        }
+
+        #install-btn.hidden {
+            display: none;
+        }
+
         .controls {
             text-align: center;
             color: #aaa;
@@ -208,6 +259,11 @@
     <div class="container">
         <h1>🚗 Car Game</h1>
 
+        <div class="install-banner" id="install-banner">
+            <p>📱 Install this game on your device!</p>
+            <button id="install-btn">📲 Install App</button>
+        </div>
+
         <div class="status-bar">
             <div class="status-item">Score: <span id="score">0</span></div>
             <div class="status-item">Level: <span id="level">1</span></div>
@@ -244,6 +300,7 @@
         </div>
     </div>
 
+    <script src="/Car-game/service-worker-register.js"></script>
     <script>
         const canvas = document.getElementById("game-canvas");
         const ctx = canvas.getContext("2d");
@@ -254,6 +311,8 @@
         const pauseBtn = document.getElementById("pause-btn");
         const gameOverModal = document.getElementById("game-over-modal");
         const restartBtn = document.getElementById("restart-btn");
+        const installBanner = document.getElementById("install-banner");
+        const installBtn = document.getElementById("install-btn");
 
         const gridSize = 20;
         const tileCount = canvas.width / gridSize;
@@ -273,8 +332,31 @@
         let gameSpeed = 100;
         let trafficSpeed = 30;
         let trafficSpeedCounter = 0;
+        let deferredPrompt;
 
         bestScoreElement.textContent = bestScore;
+
+        // PWA Install Event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.add('show');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                installBanner.classList.remove('show');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('App installed!');
+            installBanner.classList.remove('show');
+        });
 
         document.addEventListener("keydown", changeDirection);
 
