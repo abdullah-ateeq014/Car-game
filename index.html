@@ -47,15 +47,36 @@
             background: linear-gradient(135deg, #ff9800, #fb8c00);
             padding: 15px;
             border-radius: 8px;
-            text-align: center;
             width: 100%;
             margin-bottom: 10px;
-            display: none;
+            text-align: center;
+            animation: slideDown 0.3s ease-out;
         }
 
-        .install-banner.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
+        .install-banner p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .install-banner button {
+            background-color: white;
+            color: #ff9800;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .install-banner button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .install-banner.hidden {
+            display: none;
         }
 
         @keyframes slideDown {
@@ -67,11 +88,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        .install-banner p {
-            margin: 0 0 10px 0;
-            font-weight: bold;
         }
 
         .status-bar {
@@ -159,21 +175,6 @@
             opacity: 0.7;
         }
 
-        #install-btn {
-            background-color: #ff9800;
-            color: white;
-            min-width: 120px;
-        }
-
-        #install-btn:hover {
-            background-color: #fb8c00;
-            box-shadow: 0 0 15px rgba(255, 152, 0, 0.7);
-        }
-
-        #install-btn.hidden {
-            display: none;
-        }
-
         .controls {
             text-align: center;
             color: #aaa;
@@ -259,7 +260,7 @@
     <div class="container">
         <h1>🚗 Car Game</h1>
 
-        <div class="install-banner" id="install-banner">
+        <div class="install-banner hidden" id="install-banner">
             <p>📱 Install this game on your device!</p>
             <button id="install-btn">📲 Install App</button>
         </div>
@@ -333,6 +334,7 @@
         let trafficSpeed = 30;
         let trafficSpeedCounter = 0;
         let deferredPrompt;
+        let installPromptShown = false;
 
         bestScoreElement.textContent = bestScore;
 
@@ -340,7 +342,10 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBanner.classList.add('show');
+            if (!installPromptShown) {
+                installBanner.classList.remove('hidden');
+                installPromptShown = true;
+            }
         });
 
         installBtn.addEventListener('click', async () => {
@@ -349,13 +354,13 @@
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log(`User response: ${outcome}`);
                 deferredPrompt = null;
-                installBanner.classList.remove('show');
+                installBanner.classList.add('hidden');
             }
         });
 
         window.addEventListener('appinstalled', () => {
-            console.log('App installed!');
-            installBanner.classList.remove('show');
+            console.log('App installed successfully!');
+            installBanner.classList.add('hidden');
         });
 
         document.addEventListener("keydown", changeDirection);
