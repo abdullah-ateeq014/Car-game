@@ -1,9 +1,9 @@
 const CACHE_NAME = 'car-game-v1';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/game.js',
-    '/manifest.json'
+    '/Car-game/',
+    '/Car-game/index.html',
+    '/Car-game/game.js',
+    '/Car-game/manifest.json'
 ];
 
 self.addEventListener('install', event => {
@@ -25,7 +25,7 @@ self.addEventListener('fetch', event => {
                 return fetch(event.request);
             })
             .catch(() => {
-                return caches.match('/index.html');
+                return caches.match('/Car-game/index.html');
             })
     );
 });

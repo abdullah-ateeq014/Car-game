@@ -2,11 +2,11 @@
   "name": "Car Game - Drive & Survive!",
   "short_name": "Car Game",
   "description": "A fun car racing game where you avoid traffic and score points!",
-  "start_url": "/",
+  "start_url": "/Car-game/",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#4caf50",
-  "scope": "/",
+  "scope": "/Car-game/",
   "icons": [
     {
       "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%234caf50' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>🚗</text></svg>",

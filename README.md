@@ -30,7 +30,7 @@ A fun and interactive car racing game where you avoid traffic and score points! 
 
 ### On Mobile:
 1. Visit the game URL in your browser
-2. Tap the menu (⋮ or ⋯)
+2. Tap the menu (⋯ or ⋮)
 3. Select "Install app" or "Add to home screen"
 4. Confirm installation
 
@@ -67,14 +67,9 @@ A fun and interactive car racing game where you avoid traffic and score points! 
 - `service-worker.js` - Offline support
 - `service-worker-register.js` - Service worker registration
 
-## 🚀 Deployment
+## 🚀 Live Demo
 
-This game is optimized for GitHub Pages. Simply:
-
-1. Create a GitHub repository named `car-game`
-2. Push all files to the repository
-3. Enable GitHub Pages in repository settings
-4. Your game will be live at: `https://yourusername.github.io/car-game/`
+Play the game here: https://abdullah-ateeq014.github.io/Car-game/
 
 ## 📄 License
 
